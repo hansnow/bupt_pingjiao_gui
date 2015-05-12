@@ -176,12 +176,58 @@ class makeSimplePanel:
 
 class makeProPanel:
     def __init__(self,master):
-        frame = Frame(master)
-        frame.pack()
+        self.MainFrame = Frame(master)
+        self.MainFrame.pack()
 
-        print(getCourseInfo())
-        self.info = Label(frame,text="Pro")
-        self.info.pack()
+        # self.ChildFrame = []
+        # self.ChildLbl = []
+        # self.ChildEntry = []
+
+        self.ChkBtnVar = []
+        self.ChkBtn = []
+        self.InfoArray = getCourseInfo()
+
+
+        self.initFrame()
+
+        self.CommentText = Text(self.MainFrame,height=5,font=("Helvetica", 20))
+        self.CommentText.grid(row=len(self.ChkBtn),column=0,sticky=W+E)
+
+        self.submitBtn = Button(self.MainFrame,text="提交",command=self.submitComment)
+        self.submitBtn.grid(row=len(self.ChkBtn)+1,column=0)
+
+
+        # self.addFrame(getCourseInfo())
+    # def addFrame(self,InfoArray):
+    #     for count,data in enumerate(InfoArray):
+            # self.ChildFrame.append(Frame(self.MainFrame))
+            # self.ChildFrame[count].pack()
+
+            # self.ChildLbl.append(Label(self.ChildFrame[count],text=data['TeacherName'],justify=LEFT))
+            # self.ChildLbl[count].grid(row=count,column=0,columnspan=2,sticky=W+E)
+
+            # self.ChildEntry.append(Entry(self.ChildFrame[count]))
+            # self.ChildEntry[count].grid(row=count,column=2,columnspan=2)
+
+    def initFrame(self):
+        for count,data in enumerate(self.InfoArray):
+            # print('enter the for loop')
+            self.ChkBtnVar.append(IntVar())
+            # print('add a variable')
+            self.ChkBtn.append(Checkbutton(self.MainFrame,text=data['TeacherName']+' ('+data['CourseName']+')',variable=self.ChkBtnVar[count]))
+            # print('create a chkbtn')
+            self.ChkBtn[count].grid(row=count,column=0)
+            # print('chkbtn has been layouted')
+
+    def submitComment(self):
+        for count,data in enumerate(self.ChkBtnVar):
+            if data.get():
+                print(self.InfoArray[count]['TeacherName'])
+
+        print(self.CommentText.get('0.0',END).strip())
+
+    def refreshFrame(self):
+        pass
 
 def getStuName():
     html = rq.get('http://jwxt.bupt.edu.cn/menu/s_top.jsp',cookies=COOKIES).text
@@ -190,6 +236,10 @@ def getStuName():
     return name.split('\xa0')[1]
 
 def getCourseInfo():
+
+    # this function should return availiable course info
+    # that is, courses that has been evaluated will be ignored
+
     html = rq.get('http://jwxt.bupt.edu.cn/jxpgXsAction.do?oper=listWj',cookies=COOKIES).text
     soup = BeautifulSoup(html)
     CourseInfo = []
