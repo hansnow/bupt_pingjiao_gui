@@ -127,10 +127,52 @@ class makeSimplePanel:
         frame = Frame(master)
         frame.pack()
 
-        print(getStuName())
+        # Variable that store the RadioBtn value
+        self.RadioBtnValue = IntVar()
+        self.TeachersName = ''
+        for i in getCourseInfo():
+            self.TeachersName += (i['TeacherName'] + '、')
+        self.TeachersName = self.TeachersName[0:-1]
+        print(self.TeachersName)
 
-        self.info = Label(frame,text="simple")
-        self.info.pack()
+        self.InfoLbl = Label(frame,text='对 '+self.TeachersName+' 等老师做出统一评价')
+        self.InfoLbl.grid(row=0,column=0,columnspan=8)
+
+        self.RadioBtn1 = Radiobutton(frame,text='优+',variable=self.RadioBtnValue,value=1)
+        self.RadioBtn1.grid(row=1,column=0)
+
+        self.RadioBtn2 = Radiobutton(frame,text='优',variable=self.RadioBtnValue,value=2)
+        self.RadioBtn2.grid(row=1,column=1)
+
+        self.RadioBtn3 = Radiobutton(frame,text='优-',variable=self.RadioBtnValue,value=3)
+        self.RadioBtn3.grid(row=1,column=2)
+
+        self.RadioBtn4 = Radiobutton(frame,text='良+',variable=self.RadioBtnValue,value=4)
+        self.RadioBtn4.grid(row=1,column=3)
+
+        self.RadioBtn5 = Radiobutton(frame,text='良',variable=self.RadioBtnValue,value=5)
+        self.RadioBtn5.grid(row=1,column=4)
+
+        self.RadioBtn6 = Radiobutton(frame,text='中',variable=self.RadioBtnValue,value=6)
+        self.RadioBtn6.grid(row=1,column=5)
+
+        self.RadioBtn7 = Radiobutton(frame,text='及格',variable=self.RadioBtnValue,value=7)
+        self.RadioBtn7.grid(row=1,column=6)
+
+        self.RadioBtn8 = Radiobutton(frame,text='不及格',variable=self.RadioBtnValue,value=8)
+        self.RadioBtn8.grid(row=1,column=7)
+
+        self.RadioBtnValue.set(2)
+
+        self.CommentText = Text(frame,height=5,width=25,font=("Helvetica", 20))
+        self.CommentText.grid(row=2,column=0,columnspan=8,rowspan=1,sticky=W+E+N+S)
+        # self.CommentText.tag_config("test",font=("Helvetica", 20))
+        self.CommentText.insert(END,'老师授课时重点突出，层次分明，注重理论和实际相结合，语言生动，举例充分恰当，鼓励学生踊跃发言，课堂气氛活跃。')
+
+        self.SubmitBtn = Button(frame,text="提交",command=self.submitComment)
+        self.SubmitBtn.grid(row=3,column=3,columnspan=2,sticky=W+E)
+    def submitComment(self):
+        print(self.CommentText.get('0.0',END).strip())
 
 class makeProPanel:
     def __init__(self,master):
